@@ -1,0 +1,133 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id          String     @id @default(cuid())
+  email       String     @unique
+  password    String
+  resetToken  String?    @unique
+  loginToken  String?    @unique
+  status      UserStatus @default(INACTIVATED)
+  loginExpire DateTime?
+  resetExpire DateTime?
+  uID         Int        @unique @default(autoincrement())
+}
+
+model Project {
+  title          String
+  content        String
+  position       String
+  tasks          String
+  problems       String?
+  solutions      String?
+  company        String
+  employmentType String
+  status         ProjectStatus    @default(ACTIVATED)
+  deletedAt      DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  id             Int       @unique @default(autoincrement())
+  image_url      String
+}
+
+model Category {
+  name       String      @unique
+  id         Int         @unique @default(autoincrement())
+  createdAt  DateTime    @default(now())
+  deletedAt  DateTime?
+  updatedAt  DateTime    @updatedAt
+  technicals Technical[]
+}
+
+model Technical {
+  name       String
+  logo       String
+  id         Int       @unique @default(autoincrement())
+  categoryId Int
+  createdAt  DateTime  @default(now())
+  deletedAt  DateTime?
+  updatedAt  DateTime  @updatedAt
+  category   Category  @relation(fields: [categoryId], references: [id])
+}
+
+model SoftSkill {
+  name      String
+  id        Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+  updatedAt DateTime  @updatedAt
+}
+
+model Hobby {
+  name        String
+  image_url   String?
+  description String?
+  status      HobbyStatus @default(SUB)
+  id          Int         @unique @default(autoincrement())
+  createdAt   DateTime    @default(now())
+  deletedAt   DateTime?
+  updatedAt   DateTime    @updatedAt
+}
+
+model Contract {
+  gmail     String?
+  facebook  String?
+  line      String?
+  instagram String?
+  x         String?
+  linkedIn  String?
+  github    String?
+  address   String?
+  phone     String?
+  id        Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+  updatedAt DateTime  @updatedAt
+}
+
+model MainProfile {
+  firstname   String
+  lastname    String
+  image_url   String?
+  role        String
+  description String
+  id          Int       @unique @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  deletedAt   DateTime?
+  updatedAt   DateTime  @updatedAt
+}
+
+model Education {
+  name      String
+  GPAX      String?
+  faculty   String?
+  starttime DateTime
+  endtime   DateTime?
+  id        Int       @unique @default(autoincrement())
+  logo_url  String?
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+  updatedAt DateTime  @updatedAt
+}
+
+enum UserStatus {
+  INACTIVATED @map("0")
+  ACTIVATED   @map("1")
+}
+
+enum ProjectStatus {
+  INACTIVATED @map("0")
+  ACTIVATED   @map("1")
+}
+
+enum HobbyStatus {
+  MAIN @map("main")
+  SUB  @map("sub")
+}
