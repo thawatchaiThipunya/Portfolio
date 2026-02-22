@@ -24,7 +24,7 @@
       
       
 //       return NextResponse.next();
-//     } catch (error) {
+//     } catch  {
       
 //       console.error("Middleware Auth Error:", error);
 //       const response = NextResponse.redirect(new URL('/login', request.url));
@@ -87,7 +87,7 @@ export async function middleware(request: NextRequest) {
     try {
       await jwtVerify(token, JWT_SECRET);
       return NextResponse.next();
-    } catch (error) {
+    } catch  {
       return NextResponse.json({ error: "Invalid Token" }, { status: 401 });
     }
   }
@@ -98,7 +98,7 @@ export async function middleware(request: NextRequest) {
     try {
       await jwtVerify(token, JWT_SECRET);
       return NextResponse.next();
-    } catch (error) {
+    } catch  {
       return NextResponse.redirect(new URL('/login', request.url));
     }
   }
