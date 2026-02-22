@@ -1,19 +1,8 @@
 // lib/types.ts
 
-export enum UserStatus {
-  INACTIVATED = "0",
-  ACTIVATED = "1",
-}
-
-export enum ProjectStatus {
-  INACTIVATED = "0",
-  ACTIVATED = "1",
-}
-
-export enum HobbyStatus {
-  MAIN = "main",
-  SUB = "sub",
-}
+import { UserStatus } from "@prisma/client";
+import { HobbyStatus } from "@prisma/client";
+import { ProjectStatus } from "@prisma/client"; 
 
 export interface BaseEntity {
   id: number;
