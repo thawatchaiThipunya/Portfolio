@@ -2,6 +2,7 @@ import { authService } from "@/backend/services/authService";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
 import { sendResetEmail } from "../services/mailService";
+import { User as PrismaUser } from "@prisma/client";
 
 export const authController = {
   async login(req: Request) {
@@ -9,8 +10,8 @@ export const authController = {
       const { email, password } = await req.json();
       
       if (!email || !password) return Response.json({ error: "Missing Email or Password" }, { status: 422 });
-
-      const user = await authService.findUserByEmail(email);
+      
+      const user: PrismaUser | null = await authService.findUserByEmail(email);
       if (!user || !(await authService.verifyPassword(password, user.password))) {
         return Response.json({ error: "อีเมลหรือรหัสผ่านไม่ถูกต้อง" }, { status: 401 });
       }
