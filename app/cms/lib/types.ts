@@ -2,7 +2,7 @@
 
 import { UserStatus } from "@prisma/client";
 import { HobbyStatus } from "@prisma/client";
-import { ProjectStatus } from "@prisma/client"; 
+import { UserStatus as PrismaUserStatus } from "@prisma/client";
 
 export interface BaseEntity {
   id: number;
@@ -45,7 +45,7 @@ export interface Project extends BaseEntity {
   company: string;
   employmentType: string;
   image_url: string;
-  status: ProjectStatus;
+  status: PrismaUserStatus;
 }
 
 export interface SoftSkill extends BaseEntity {

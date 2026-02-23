@@ -16,7 +16,7 @@ export const authController = {
         return Response.json({ error: "อีเมลหรือรหัสผ่านไม่ถูกต้อง" }, { status: 401 });
       }
 
-      const token = authService.generateSessionToken(user);
+      const token = authService.generateSessionToken(user as PrismaUser);
       await authService.updateLoginSession(user.id, token);
       
       (await cookies()).set("session_token", token, {
