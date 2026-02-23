@@ -2,7 +2,6 @@ import { prisma } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-// import { User } from "@/app/cms/lib/types";
 import { User as PrismaUser } from "@prisma/client";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
@@ -21,7 +20,7 @@ export const authService = {
     return await prisma.user.findUnique({ where: { email } });
   },
 
-  generateSessionToken(user: Pick<PrismaUser, 'id' | 'email'>) {
+  generateSessionToken(user: PrismaUser) {
     return jwt.sign(
       { userId: user.id, email: user.email },
       JWT_SECRET,
