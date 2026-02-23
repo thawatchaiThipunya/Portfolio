@@ -5,7 +5,7 @@ import { hobbyService } from '@/app/APIcont/services/hobbyService';
 import { Button } from '@/app/components/ui/button';
 import { X, Upload } from 'lucide-react'; 
 import Image from 'next/image';
-import { HobbyStatus } from '../lib/types'; 
+import { HobbyStatus } from '@prisma/client';
 
 export default function HobbyForm({ id }: { id?: string }) {
   const router = useRouter();

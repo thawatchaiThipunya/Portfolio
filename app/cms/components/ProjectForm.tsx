@@ -5,7 +5,7 @@ import { projectService } from '@/app/APIcont/services/projectService';
 import { Input } from '@/app/components/ui/Input';
 import { X, ImageIcon, Layout, Briefcase, AlertCircle, Save } from 'lucide-react';
 import Image from 'next/image';
-import { ProjectStatus } from '../lib/types'; // นำเข้า Enum
+import { ProjectStatus } from '@prisma/client';
 
 export default function ProjectForm({ id }: { id?: string }) {
   const router = useRouter();

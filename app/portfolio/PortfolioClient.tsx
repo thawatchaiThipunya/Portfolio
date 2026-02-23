@@ -458,6 +458,7 @@
 //   );
 //   return href ? <a href={href} target="_blank" className="w-full">{content}</a> : <div className="w-full">{content}</div>;
 // }
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -529,7 +530,7 @@ export default function PortfolioClient({
   return (
     <div className="min-h-screen bg-[#020617] text-slate-200 selection:bg-sky-500/30 font-light overflow-x-hidden">
       
-      {/* 1. MAIN PROFILE - ปรับขนาด Text ในมือถือให้ไม่ล้น */}
+      
       <section className="min-h-[40vh] md:h-screen flex flex-col items-center justify-center p-4 md:p-6 text-center relative">
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="relative mb-8 md:mb-12">
             <div className="w-48 h-48 sm:w-64 sm:h-64 md:w-[24rem] md:h-[24rem] rounded-[3rem] md:rounded-[5rem] border-[10px] md:border-[20px] border-white/5 overflow-hidden shadow-2xl rotate-2">
@@ -552,12 +553,12 @@ export default function PortfolioClient({
         </h1>
       </section>
 
-      {/* Profile Description - ลดช่องว่าง */}
+      
       <section className="py-ุ md:py-20 text-center max-w-4xl mx-auto px-6">
           <p className="text-white/40 text-lg md:text-3xl italic leading-relaxed">&quot;{profile?.description}&quot;</p>
       </section>
 
-      {/* 2. CONTACT - ปรับ Grid สำหรับ Mobile */}
+      
       <section className="py-12 md:py-20 px-4 md:px-6">
         <div className="max-w-7xl mx-auto bg-white/5 backdrop-blur-3xl rounded-[3rem] md:rounded-[5rem] border border-white/10 p-8 md:p-16 relative overflow-hidden">
           <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-sky-400 mb-10 md:mb-20 text-center italic">Contact Headquarters</h2>
@@ -574,10 +575,10 @@ export default function PortfolioClient({
         </div>
       </section>
 
-      {/* Main Content Wrapper - ลด space-y ลงสำหรับ Mobile */}
+      
       <div className="max-w-7xl mx-auto px-4 md:px-6 space-y-24 md:space-y-40 lg:space-y-60 pb-20 md:pb-40">
          
-         {/* 3. HOBBIES - ปรับ Grid */}
+         
          <section>
             <h2 className="text-4xl md:text-6xl font-black mb-10 md:mb-20 italic uppercase tracking-tighter">Favorite Hobbies.</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 mb-6 md:mb-10">
@@ -627,10 +628,10 @@ export default function PortfolioClient({
                         <div className="absolute left-[-4.5px] md:left-[43px] top-2 w-2.5 h-2.5 md:w-4 md:h-4 rounded-full bg-sky-500 shadow-[0_0_15px_rgba(14,165,233,1)] z-10" />
                         
                         <div className="flex flex-col gap-6 md:gap-10">
-                            {/* Responsive Header: Phone/Tablet=Stack, PC=Side-by-Side */}
+                            
                             <div className="flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-10">
                             
-                            {/* Logo Container - ปรับขนาดให้พอดีกับ Tablet */}
+                            
                             <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-32 md:h-32 shrink-0 bg-white/10 rounded-2xl md:rounded-[2.5rem] overflow-hidden border border-white/10">
                                 {edu.logo_url ? (
                                     <Image src={edu.logo_url as string} alt={edu.name} fill className="object-contain p-2 md:p-4" />
@@ -639,7 +640,7 @@ export default function PortfolioClient({
                                 )}
                             </div>
 
-                            {/* Text Section - จัดการความกว้าง Tablet 700px */}
+                            
                             <div className="flex-1 min-w-0 space-y-3 md:space-y-5">
                                 <div className="flex flex-wrap items-center gap-3">
                                     <span className="inline-block text-sky-400 font-black tracking-[0.2em] text-[10px] md:text-sm uppercase bg-sky-500/5 px-3 py-1 rounded-full border border-sky-500/10">
@@ -647,21 +648,7 @@ export default function PortfolioClient({
                                     </span>
                                 </div>
                                 
-                                {/* - text-2xl สำหรับ Phone 320px
-                                    - sm:text-4xl สำหรับ Tablet 700px (ไม่เบียดเกินไป)
-                                    - md:text-6xl สำหรับ PC 1080p
-                                */}
                                 <div className="flex-1 min-w-0 space-y-3 md:space-y-5">
-                                    <div className="flex flex-wrap items-center gap-3">
-                                    <span className="inline-block text-sky-400 font-black tracking-[0.2em] text-[10px] md:text-sm uppercase bg-sky-500/5 px-3 py-1 rounded-full border border-sky-500/10">
-                                        {new Date(edu.starttime).getFullYear()} — {edu.endtime ? new Date(edu.endtime).getFullYear() : 'PRESENT'}
-                                    </span>
-                                    </div>
-                                    
-                                    {/* - break-normal: ห้ามตัดกลางคำ
-                                    - overflow-wrap-normal: ให้ตัดเมื่อเจอช่องว่างเท่านั้น
-                                    - sm:text-[2.5rem]: ปรับขนาดให้พอดีกับจอ 700px ไม่ให้ใหญ่จนเบียดขอบ
-                                    */}
                                     <h4 className="text-2xl sm:text-[2.5rem] md:text-6xl font-black uppercase italic leading-[1.1] md:leading-[0.9] text-white tracking-tighter break-normal overflow-wrap-normal">
                                     {edu.name}
                                     </h4>
@@ -670,10 +657,6 @@ export default function PortfolioClient({
                                     {edu.faculty}
                                     </p>
                                 </div>
-                                
-                                <p className="text-white/40 text-sm sm:text-lg md:text-2xl font-medium italic leading-relaxed break-words max-w-2xl">
-                                    {edu.faculty}
-                                </p>
                             </div>
                             </div>
 

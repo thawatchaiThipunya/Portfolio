@@ -15,7 +15,12 @@ export interface User extends Omit<BaseEntity, 'id'> {
   id: string; // User ใช้ cuid
   uID: number;
   email: string;
+  password?: string;
   status: UserStatus;
+  loginToken?: string | null;
+  resetToken?: string | null;
+  loginExpire?: Date | null;
+  resetExpire?: Date | null;
 }
 
 export interface Category extends BaseEntity {

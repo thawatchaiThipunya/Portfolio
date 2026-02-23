@@ -2,10 +2,11 @@
 import { useEffect, useState } from 'react';
 import { hobbyService } from '@/app/APIcont/services/hobbyService';
 import { Button } from '@/app/components/ui/button';
-import { Hobby, HobbyStatus } from '@/app/cms/lib/types';
+import { Hobby } from '@/app/cms/lib/types';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Plus, Edit, Trash2, Sparkles } from 'lucide-react';
+import { HobbyStatus } from '@prisma/client';
 
 export default function HobbyListPage() {
   const [hobbies, setHobbies] = useState<Hobby[]>([]);
