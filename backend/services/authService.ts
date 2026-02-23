@@ -22,7 +22,7 @@ export const authService = {
 
   generateSessionToken(user: PrismaUser) {
     return jwt.sign(
-      { userId: user.id, email: user.email },
+      { userId: user.id, email: user.email, status: user.status },
       JWT_SECRET,
       { expiresIn: '6h' }
     );
