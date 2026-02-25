@@ -11,7 +11,7 @@ export default function ProjectForm({ id }: { id?: string }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   
-  // 1. ระบุ Type ให้ useState เพื่อรองรับ Enum ProjectStatus
+  
   const [form, setForm] = useState<{
     title: string;
     content: string;
@@ -31,7 +31,7 @@ export default function ProjectForm({ id }: { id?: string }) {
     solutions: "",
     company: "",
     employmentType: "Full-time",
-    status: ProjectStatus.ACTIVATED // ใช้ Enum แทน string "Activated"
+    status: ProjectStatus.ACTIVATED 
   });
   
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -124,7 +124,7 @@ export default function ProjectForm({ id }: { id?: string }) {
 
       <form onSubmit={handleSubmit} className="space-y-8">
         
-        {/* Project Image */}
+        
         <div className="space-y-3">
           <label className="text-xs font-black uppercase tracking-widest text-slate-400">Project Cover Image</label>
           <div className="relative border-2 border-dashed border-slate-200 rounded-[2rem] p-4 bg-slate-50 flex flex-col items-center justify-center min-h-[250px] transition-all hover:bg-slate-100">
@@ -168,10 +168,10 @@ export default function ProjectForm({ id }: { id?: string }) {
               onChange={e => setForm({...form, employmentType: e.target.value})}
             >
               <option value="Full-time">Full-time</option>
-              <option value="Contract">Contract</option>
+              <option value="Contract">Academic project</option>
               <option value="Internship">Internship</option>
               <option value="Freelance">Freelance</option>
-              <option value="Co-Operative">Co-Operative</option>
+              <option value="Co-Operative">Co-Opperative</option>
               <option value="Thesis">Thesis</option>
             </select>
           </div>
