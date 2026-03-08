@@ -17,8 +17,16 @@ export const technicalBackendService = {
     return prisma.technical.findMany({
       where: { deletedAt: null },
       include: { category: true },
-      orderBy: { id: "desc" },
+      orderBy: [{ categoryId: "asc" }, { sortOrder: "asc" }],
     });
+  },
+
+  async reorder(items: { id: number; sortOrder: number }[]): Promise<void> {
+    await prisma.$transaction(
+      items.map(({ id, sortOrder }) =>
+        prisma.technical.update({ where: { id }, data: { sortOrder } })
+      )
+    );
   },
 
   async findById(id: number): Promise<TechnicalWithCategory | null> {

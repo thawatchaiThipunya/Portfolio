@@ -72,6 +72,7 @@ export interface Technical extends BaseEntity {
   name: string;
   logo: string;
   categoryId: number;
+  sortOrder: number;
   category?: Category;
 }
 
@@ -92,4 +93,5 @@ export interface Project extends BaseEntity {
   solutions?: string | null;
   image_url: string;
   status: ProjectStatus;
+  sortOrder: number;
 }

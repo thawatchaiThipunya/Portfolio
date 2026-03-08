@@ -5,8 +5,16 @@ export const projectBackendService = {
   async getAll(): Promise<Project[]> {
     return prisma.project.findMany({
       where: { deletedAt: null },
-      orderBy: { createdAt: "desc" },
+      orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
     });
+  },
+
+  async reorder(items: { id: number; sortOrder: number }[]): Promise<void> {
+    await prisma.$transaction(
+      items.map(({ id, sortOrder }) =>
+        prisma.project.update({ where: { id }, data: { sortOrder } })
+      )
+    );
   },
 
   async getById(id: number): Promise<Project | null> {

@@ -1286,9 +1286,7 @@ export default function PortfolioClient({
                     if (!rawTechs) return null;
 
                     
-                    const sortedTechs = [...rawTechs].sort((a, b) => 
-                    a.name.localeCompare(b.name)
-                    );
+                    const sortedTechs = [...rawTechs].sort((a, b) => a.sortOrder - b.sortOrder);
 
                     return (
                     <div key={categoryName}>
