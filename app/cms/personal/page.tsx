@@ -1,7 +1,7 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Pencil, Trash2, Hash } from 'lucide-react';
+import { Pencil, Trash2, Hash, Search } from 'lucide-react';
 import { softSkillService } from '@/app/APIcont/services/softSkillService';
 import { SoftSkill } from '../lib/types';
 import { Button } from '@/app/components/ui/button';
@@ -9,6 +9,7 @@ import { Button } from '@/app/components/ui/button';
 export default function SoftSkillPage() {
   const [data, setData] = useState<SoftSkill[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
 
   const loadData = async () => {
     try {
@@ -20,6 +21,10 @@ export default function SoftSkillPage() {
   };
 
   useEffect(() => { loadData(); }, []);
+
+  const filtered = useMemo(() =>
+    data.filter(item => item.name.toLowerCase().includes(search.toLowerCase())),
+    [data, search]);
 
   const handleDelete = async (id: number) => {
     if (confirm("คุณแน่ใจหรือไม่ว่าต้องการลบทักษะนี้?")) {
@@ -42,6 +47,18 @@ export default function SoftSkillPage() {
         </Link>
       </div>
 
+      {/* Search */}
+      <div className="relative">
+        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+        <input
+          type="text"
+          placeholder="ค้นหาทักษะ..."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400 bg-white"
+        />
+      </div>
+
       <div className="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
         <table className="w-full text-left border-collapse">
           <thead className="bg-slate-50/50 text-slate-400 text-[10px] font-black uppercase tracking-widest">
@@ -54,9 +71,9 @@ export default function SoftSkillPage() {
           <tbody className="divide-y divide-slate-50">
             {loading ? (
               <tr><td colSpan={3} className="p-20 text-center text-slate-400 font-medium">กำลังโหลดข้อมูล...</td></tr>
-            ) : data.length === 0 ? (
-                <tr><td colSpan={3} className="p-20 text-center text-slate-400 font-medium">ยังไม่มีข้อมูล Soft Skill</td></tr>
-            ) : data.map(item => (
+            ) : filtered.length === 0 ? (
+                <tr><td colSpan={3} className="p-20 text-center text-slate-400 font-medium">ไม่พบข้อมูล</td></tr>
+            ) : filtered.map(item => (
               <tr key={item.id} className="hover:bg-slate-50/50 transition-colors group">
                 <td className="px-8 py-5 text-slate-400 font-mono text-sm">#{item.id}</td>
                 <td className="px-8 py-5">

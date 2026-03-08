@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Pencil, Trash2 ,GraduationCap } from 'lucide-react'; 
+import { Pencil, Trash2, GraduationCap, Search } from 'lucide-react';
 import { educationService } from '@/app/APIcont/services/educationService';
 import { Education } from '../lib/types';
 import { Button } from '@/app/components/ui/button';
@@ -10,6 +10,7 @@ import { Button } from '@/app/components/ui/button';
 export default function EducationPage() {
   const [data, setData] = useState<Education[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
 
   const loadData = async () => {
     try {
@@ -26,6 +27,12 @@ export default function EducationPage() {
   useEffect(() => {
     loadData();
   }, []);
+
+  const filtered = useMemo(() =>
+    data.filter(item =>
+      item.name.toLowerCase().includes(search.toLowerCase()) ||
+      (item.faculty ?? '').toLowerCase().includes(search.toLowerCase())
+    ), [data, search]);
 
   const handleDelete = async (id: number) => {
     if (confirm("คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลการศึกษานี้?")) {
@@ -62,6 +69,18 @@ export default function EducationPage() {
         </Link>
       </div>
 
+      {/* Search */}
+      <div className="relative">
+        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+        <input
+          type="text"
+          placeholder="ค้นหาสถาบัน หรือสาขาวิชา..."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 bg-white"
+        />
+      </div>
+
       <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
         <table className="w-full text-left border-collapse">
           <thead className="bg-slate-50 text-slate-600 text-xs font-bold uppercase">
@@ -77,12 +96,12 @@ export default function EducationPage() {
               <tr>
                 <td colSpan={4} className="px-6 py-10 text-center text-slate-400">กำลังโหลดข้อมูล...</td>
               </tr>
-            ) : data.length === 0 ? (
+            ) : filtered.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-6 py-10 text-center text-slate-400">ไม่มีข้อมูลการศึกษา</td>
+                <td colSpan={4} className="px-6 py-10 text-center text-slate-400">ไม่พบข้อมูล</td>
               </tr>
             ) : (
-              data.map((item) => (
+              filtered.map((item) => (
                 <tr key={item.id} className="hover:bg-slate-50/50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-4">

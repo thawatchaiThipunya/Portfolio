@@ -1,17 +1,21 @@
 import { prisma } from "@/lib/db";
-import { MainProfile } from "@/app/cms/lib/types";
-import { Prisma } from "@prisma/client";
+import { MainProfile } from "@prisma/client";
+
+type MainProfileInput = {
+  firstname?: string;
+  lastname?: string;
+  image_url?: string | null;
+  role?: string;
+  description?: string;
+};
 
 export const mainProfileBackendService = {
   async findFirst(): Promise<MainProfile | null> {
-    const data = await prisma.mainProfile.findUnique({
-      where: { id: 2 }
-    });
-    return data as unknown as MainProfile | null;
+    return prisma.mainProfile.findUnique({ where: { id: 2 } });
   },
 
-  async update(payload: Partial<MainProfile>): Promise<MainProfile> {
-    const dataToUpdate = {
+  async update(payload: MainProfileInput): Promise<MainProfile> {
+    const data = {
       firstname: payload.firstname,
       lastname: payload.lastname,
       image_url: payload.image_url,
@@ -20,18 +24,9 @@ export const mainProfileBackendService = {
     };
 
     try {
-      const updated = await prisma.mainProfile.update({
-        where: { id: 2 },
-        data: dataToUpdate as Prisma.Args<typeof prisma.mainProfile.update, "update">["data"],
-      });
-      return updated as unknown as MainProfile;
+      return await prisma.mainProfile.update({ where: { id: 2 }, data });
     } catch {
-      return await prisma.mainProfile.create({
-        data: {
-          id: 2,
-          ...dataToUpdate
-        } as Prisma.Args<typeof prisma.mainProfile.create, "create">["data"],
-      }) as unknown as MainProfile;
+      return prisma.mainProfile.create({ data: { id: 2, ...data } as Parameters<typeof prisma.mainProfile.create>[0]["data"] });
     }
-  }
+  },
 };

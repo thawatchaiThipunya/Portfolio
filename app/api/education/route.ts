@@ -1,5 +1,7 @@
 import { educationController } from "@/backend/controller/educationController";
 
+export const dynamic = 'force-dynamic';
+
 // ดึงข้อมูลทั้งหมด (GET /api/education)
 export async function GET() {
   return educationController.getAll();

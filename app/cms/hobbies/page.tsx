@@ -1,15 +1,17 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { hobbyService } from '@/app/APIcont/services/hobbyService';
 import { Button } from '@/app/components/ui/button';
 import { Hobby } from '@/app/cms/lib/types';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Plus, Edit, Trash2, Sparkles } from 'lucide-react';
+import { Plus, Edit, Trash2, Sparkles, Search } from 'lucide-react';
 import { HobbyStatus } from '@prisma/client';
 
 export default function HobbyListPage() {
   const [hobbies, setHobbies] = useState<Hobby[]>([]);
+  const [search, setSearch] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
 
   useEffect(() => {
     
@@ -22,6 +24,13 @@ export default function HobbyListPage() {
       }
     })();
   }, []); 
+
+  const filtered = useMemo(() =>
+    hobbies.filter(h => {
+      const matchSearch = h.name.toLowerCase().includes(search.toLowerCase());
+      const matchStatus = filterStatus ? h.status === filterStatus : true;
+      return matchSearch && matchStatus;
+    }), [hobbies, search, filterStatus]);
 
   const handleDelete = async (id: number) => {
     if (confirm("คุณแน่ใจหรือไม่ที่จะลบรายการนี้? ข้อมูลจะถูกย้ายไปถังขยะ")) {
@@ -38,14 +47,14 @@ export default function HobbyListPage() {
 
   return (
     <div className="p-8 bg-slate-50/50 min-h-screen">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
           <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-            My Hobbies 
+            My Hobbies
           </h1>
           <p className="text-slate-500 mt-1">จัดการกิจกรรมและสิ่งที่น่าสนใจทั้งหมดของคุณ</p>
         </div>
-        
+
         <Link href="/cms/hobbies/new">
           <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-6 rounded-2xl shadow-lg shadow-blue-200 transition-all hover:scale-105 active:scale-95 flex items-center gap-2 font-bold">
             Add New Hobby
@@ -53,8 +62,31 @@ export default function HobbyListPage() {
         </Link>
       </div>
 
+      {/* Search & Filter */}
+      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row gap-3 mb-8">
+        <div className="relative flex-1">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <input
+            type="text"
+            placeholder="ค้นหางานอดิเรก..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 bg-white"
+          />
+        </div>
+        <select
+          value={filterStatus}
+          onChange={e => setFilterStatus(e.target.value)}
+          className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 bg-white text-slate-600"
+        >
+          <option value="">ทุกสถานะ</option>
+          <option value={HobbyStatus.MAIN}>MAIN</option>
+          <option value={HobbyStatus.SUB}>SUB</option>
+        </select>
+      </div>
+
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        {hobbies.map((hobby: Hobby) => (
+        {filtered.map((hobby: Hobby) => (
           <div 
             key={hobby.id} 
             className="group bg-white border border-slate-100 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 flex flex-col h-full"
@@ -124,7 +156,7 @@ export default function HobbyListPage() {
         ))}
       </div>
 
-      {hobbies.length === 0 && (
+      {filtered.length === 0 && (
         <div className="flex flex-col items-center justify-center py-20 text-slate-400">
           <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-4">
             <Plus size={40} className="opacity-20" />

@@ -1,37 +1,27 @@
 import { prisma } from "@/lib/db";
-import { SoftSkill } from "@/app/cms/lib/types";
+import { SoftSkill } from "@prisma/client";
 
 export const softSkillBackendService = {
   async findAll(): Promise<SoftSkill[]> {
-    return await prisma.softSkill.findMany({
+    return prisma.softSkill.findMany({
       where: { deletedAt: null },
-      orderBy: { id: "asc" }
-    }) as unknown as SoftSkill[];
+      orderBy: { id: "asc" },
+    });
   },
 
   async findById(id: number): Promise<SoftSkill | null> {
-    return await prisma.softSkill.findFirst({
-      where: { id, deletedAt: null }
-    }) as unknown as SoftSkill | null;
+    return prisma.softSkill.findFirst({ where: { id, deletedAt: null } });
   },
 
   async create(name: string): Promise<SoftSkill> {
-    return await prisma.softSkill.create({
-      data: { name }
-    }) as unknown as SoftSkill;
+    return prisma.softSkill.create({ data: { name } });
   },
 
   async update(id: number, name: string): Promise<SoftSkill> {
-    return await prisma.softSkill.update({
-      where: { id },
-      data: { name }
-    }) as unknown as SoftSkill;
+    return prisma.softSkill.update({ where: { id }, data: { name } });
   },
 
   async softDelete(id: number): Promise<SoftSkill> {
-    return await prisma.softSkill.update({
-      where: { id },
-      data: { deletedAt: new Date() }
-    }) as unknown as SoftSkill;
-  }
+    return prisma.softSkill.update({ where: { id }, data: { deletedAt: new Date() } });
+  },
 };

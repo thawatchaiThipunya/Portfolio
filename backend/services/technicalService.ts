@@ -1,47 +1,55 @@
 import { prisma } from "@/lib/db";
-import { Technical } from "@/app/cms/lib/types";
+import { Technical, Prisma } from "@prisma/client";
+
+// Type สำหรับ Technical ที่ include Category (ใช้ใน findAll/findById)
+export type TechnicalWithCategory = Prisma.TechnicalGetPayload<{
+  include: { category: true };
+}>;
+
+type TechnicalInput = {
+  name?: string;
+  logo?: string;
+  categoryId?: number;
+};
 
 export const technicalBackendService = {
-  async findAll(): Promise<Technical[]> {
-    return await prisma.technical.findMany({
+  async findAll(): Promise<TechnicalWithCategory[]> {
+    return prisma.technical.findMany({
       where: { deletedAt: null },
       include: { category: true },
-      orderBy: { id: "desc" }
-    }) as unknown as Technical[];
+      orderBy: { id: "desc" },
+    });
   },
 
-  async findById(id: number): Promise<Technical | null> {
-    return await prisma.technical.findFirst({
+  async findById(id: number): Promise<TechnicalWithCategory | null> {
+    return prisma.technical.findFirst({
       where: { id, deletedAt: null },
-      include: { category: true }
-    }) as unknown as Technical | null;
+      include: { category: true },
+    });
   },
 
-  async create(payload: Partial<Technical>): Promise<Technical> {
-    return await prisma.technical.create({
+  async create(payload: TechnicalInput): Promise<Technical> {
+    return prisma.technical.create({
       data: {
-        name: payload.name!,
-        logo: payload.logo!,
-        categoryId: payload.categoryId!,
-      }
-    }) as unknown as Technical;
+        name: payload.name ?? "",
+        logo: payload.logo ?? "",
+        categoryId: payload.categoryId ?? 0,
+      },
+    });
   },
 
-  async update(id: number, payload: Partial<Technical>): Promise<Technical> {
-    return await prisma.technical.update({
+  async update(id: number, payload: TechnicalInput): Promise<Technical> {
+    return prisma.technical.update({
       where: { id },
       data: {
         name: payload.name,
         logo: payload.logo,
         categoryId: payload.categoryId,
-      }
-    }) as unknown as Technical;
+      },
+    });
   },
 
   async softDelete(id: number): Promise<Technical> {
-    return await prisma.technical.update({
-      where: { id },
-      data: { deletedAt: new Date() }
-    }) as unknown as Technical;
-  }
+    return prisma.technical.update({ where: { id }, data: { deletedAt: new Date() } });
+  },
 };

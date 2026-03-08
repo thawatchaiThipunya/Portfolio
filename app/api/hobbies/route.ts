@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+
+export const dynamic = 'force-dynamic';
 import { hobbyBackendService } from "@/backend/services/hobbyService";
 
 export async function GET() {

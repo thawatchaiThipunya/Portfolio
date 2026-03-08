@@ -1,5 +1,7 @@
 import { contractController } from "@/backend/controller/contractController";
 
+export const dynamic = 'force-dynamic';
+
 // ดึงทั้งหมด
 export async function GET() {
   return contractController.getAll();

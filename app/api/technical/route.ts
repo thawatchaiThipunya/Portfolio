@@ -1,5 +1,7 @@
 import { technicalController } from "@/backend/controller/technicalController";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   return technicalController.getAll();
 }

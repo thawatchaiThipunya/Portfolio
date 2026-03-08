@@ -1,6 +1,5 @@
 import { projectBackendService } from "../services/projectService";
 import { NextResponse } from "next/server";
-import { Project } from "@/app/cms/lib/types";
 
 export const projectController = {
   async getAll() {
@@ -26,7 +25,7 @@ export const projectController = {
 
   async create(req: Request) {
     try {
-      const body: Partial<Project> = await req.json();
+      const body = await req.json();
       const data = await projectBackendService.create(body);
       return NextResponse.json(data);
     } catch (error: unknown) {
@@ -37,7 +36,7 @@ export const projectController = {
 
   async update(req: Request, id: number) {
     try {
-      const body: Partial<Project> = await req.json();
+      const body = await req.json();
       const data = await projectBackendService.update(id, body);
       return NextResponse.json(data);
     } catch (error: unknown) {

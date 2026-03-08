@@ -1,6 +1,5 @@
 import { hobbyBackendService } from "../services/hobbyService";
 import { NextResponse } from "next/server";
-import { Hobby } from "@/app/cms/lib/types";
 
 export const hobbyController = {
   async getAll() {
@@ -26,7 +25,7 @@ export const hobbyController = {
 
   async create(req: Request) {
     try {
-      const body: Partial<Hobby> = await req.json();
+      const body = await req.json();
       const data = await hobbyBackendService.create(body);
       return NextResponse.json(data);
     } catch (error: unknown) {
@@ -37,7 +36,7 @@ export const hobbyController = {
 
   async update(req: Request, id: number) {
     try {
-      const body: Partial<Hobby> = await req.json();
+      const body = await req.json();
       const data = await hobbyBackendService.update(id, body);
       return NextResponse.json(data);
     } catch (error: unknown) {
