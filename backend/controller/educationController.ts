@@ -1,6 +1,5 @@
 import { educationBackendService } from "../services/educationService";
 import { NextResponse } from "next/server";
-import { Education } from "@/app/cms/lib/types";
 
 export const educationController = {
   async getAll() {
@@ -26,7 +25,7 @@ export const educationController = {
 
   async create(req: Request) {
     try {
-      const body: Partial<Education> = await req.json();
+      const body = await req.json();
       const data = await educationBackendService.create(body);
       return NextResponse.json(data);
     } catch (error: unknown) {
@@ -37,7 +36,7 @@ export const educationController = {
 
   async update(req: Request, id: number) {
     try {
-      const body: Partial<Education> = await req.json();
+      const body = await req.json();
       const data = await educationBackendService.update(id, body);
       return NextResponse.json(data);
     } catch (error: unknown) {

@@ -1,5 +1,7 @@
 import { categoryController } from "@/backend/controller/categoryController";
 
+export const dynamic = 'force-dynamic';
+
 // ดึงทั้งหมด
 export async function GET() {
   return categoryController.getAll();

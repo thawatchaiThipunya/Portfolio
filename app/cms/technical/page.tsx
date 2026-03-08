@@ -1,15 +1,17 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { technicalService } from '@/app/APIcont/services/technicalService';
 import { Button } from '@/app/components/ui/button';
 import { Technical } from '@/app/cms/lib/types';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Plus, Edit, Trash2, Code2, Layers } from 'lucide-react';
+import { Plus, Edit, Trash2, Code2, Layers, Search } from 'lucide-react';
 
 export default function TechnicalListPage() {
   const [technicals, setTechnicals] = useState<Technical[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [filterCategory, setFilterCategory] = useState('');
 
   const loadData = async () => {
     try {
@@ -26,6 +28,17 @@ export default function TechnicalListPage() {
     loadData();
   }, []);
 
+  const categories = useMemo(() =>
+    [...new Set(technicals.map(t => t.category?.name).filter(Boolean))],
+    [technicals]);
+
+  const filtered = useMemo(() =>
+    technicals.filter(t => {
+      const matchSearch = t.name.toLowerCase().includes(search.toLowerCase());
+      const matchCat = filterCategory ? t.category?.name === filterCategory : true;
+      return matchSearch && matchCat;
+    }), [technicals, search, filterCategory]);
+
   const handleDelete = async (id: number) => {
     if (confirm("คุณแน่ใจหรือไม่ที่จะลบรายการนี้? ข้อมูลจะถูกย้ายไปถังขยะ")) {
       try {
@@ -41,14 +54,14 @@ export default function TechnicalListPage() {
   return (
     <div className="p-8 bg-slate-50/50 min-h-screen">
       {/* Header Section */}
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
           <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
             Technical Skills
           </h1>
           <p className="text-slate-500 mt-1">จัดการคลังทักษะและเทคโนโลยีที่คุณเชี่ยวชาญ</p>
         </div>
-        
+
         <Link href="/cms/technical/new">
           <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-6 rounded-2xl shadow-lg shadow-blue-200 transition-all hover:scale-105 active:scale-95 flex items-center gap-2 font-bold">
             <Plus size={20} />
@@ -57,9 +70,33 @@ export default function TechnicalListPage() {
         </Link>
       </div>
 
+      {/* Search & Filter */}
+      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row gap-3 mb-8">
+        <div className="relative flex-1">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <input
+            type="text"
+            placeholder="ค้นหาชื่อทักษะ..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 bg-white"
+          />
+        </div>
+        <select
+          value={filterCategory}
+          onChange={e => setFilterCategory(e.target.value)}
+          className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 bg-white text-slate-600"
+        >
+          <option value="">ทุกหมวดหมู่</option>
+          {categories.map(cat => (
+            <option key={cat} value={cat!}>{cat}</option>
+          ))}
+        </select>
+      </div>
+
       {/* Grid Content */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        {technicals.map((tech: Technical) => (
+        {filtered.map((tech: Technical) => (
           <div 
             key={tech.id} 
             className="group bg-white border border-slate-100 rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 flex flex-col h-full p-4"
@@ -123,7 +160,7 @@ export default function TechnicalListPage() {
       </div>
 
       {/* Empty State */}
-      {!loading && technicals.length === 0 && (
+      {!loading && filtered.length === 0 && (
         <div className="flex flex-col items-center justify-center py-32 text-slate-400">
           <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-6">
             <Layers size={40} className="opacity-20" />

@@ -1,53 +1,49 @@
 import { prisma } from "@/lib/db";
-import { Hobby } from "@/app/cms/lib/types";
-import { Prisma } from "@prisma/client";
+import { Hobby, HobbyStatus } from "@prisma/client";
+
+type HobbyInput = {
+  name?: string;
+  image_url?: string | null;
+  description?: string | null;
+  status?: HobbyStatus;
+};
 
 export const hobbyBackendService = {
   async findAll(): Promise<Hobby[]> {
-    const data = await prisma.hobby.findMany({
+    return prisma.hobby.findMany({
       where: { deletedAt: null },
-      orderBy: { id: "desc" }
+      orderBy: { id: "desc" },
     });
-    return data as unknown as Hobby[];
   },
 
   async findById(id: number): Promise<Hobby | null> {
-    const data = await prisma.hobby.findFirst({
-      where: { id, deletedAt: null }
-    });
-    return data as unknown as Hobby | null;
+    return prisma.hobby.findFirst({ where: { id, deletedAt: null } });
   },
 
-  async create(payload: Partial<Hobby>): Promise<Hobby> {
-    const data = await prisma.hobby.create({
+  async create(payload: HobbyInput): Promise<Hobby> {
+    return prisma.hobby.create({
       data: {
-        name: payload.name,
+        name: payload.name ?? "",
         image_url: payload.image_url,
         description: payload.description,
         status: payload.status,
-      } as Prisma.Args<typeof prisma.hobby.create, "create">["data"]
+      },
     });
-    return data as unknown as Hobby;
   },
 
-  async update(id: number, payload: Partial<Hobby>): Promise<Hobby> {
-    const data = await prisma.hobby.update({
+  async update(id: number, payload: HobbyInput): Promise<Hobby> {
+    return prisma.hobby.update({
       where: { id },
       data: {
         name: payload.name,
         image_url: payload.image_url,
         description: payload.description,
         status: payload.status,
-      } as Prisma.Args<typeof prisma.hobby.update, "update">["data"]
+      },
     });
-    return data as unknown as Hobby;
   },
 
   async softDelete(id: number): Promise<Hobby> {
-    const data = await prisma.hobby.update({
-      where: { id },
-      data: { deletedAt: new Date() }
-    });
-    return data as unknown as Hobby;
-  }
+    return prisma.hobby.update({ where: { id }, data: { deletedAt: new Date() } });
+  },
 };

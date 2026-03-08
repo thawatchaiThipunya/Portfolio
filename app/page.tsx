@@ -1,4 +1,6 @@
 import PortfolioClient from '@/app/portfolio/PortfolioClient';
+
+export const dynamic = 'force-dynamic';
 import { mainProfileBackendService } from "@/backend/services/mainProfileService";
 import { contractBackendService } from "@/backend/services/contractService";
 import { hobbyBackendService } from "@/backend/services/hobbyService";

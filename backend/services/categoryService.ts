@@ -1,37 +1,27 @@
 import { prisma } from "@/lib/db";
-import { Category } from "@/app/cms/lib/types";
+import { Category } from "@prisma/client";
 
 export const categoryBackendService = {
   async findAll(): Promise<Category[]> {
-    return await prisma.category.findMany({
+    return prisma.category.findMany({
       where: { deletedAt: null },
-      orderBy: { id: "asc" }
-    }) as unknown as Category[];
+      orderBy: { id: "asc" },
+    });
   },
 
   async findById(id: number): Promise<Category | null> {
-    return await prisma.category.findFirst({
-      where: { id, deletedAt: null }
-    }) as unknown as Category | null;
+    return prisma.category.findFirst({ where: { id, deletedAt: null } });
   },
 
   async create(name: string): Promise<Category> {
-    return await prisma.category.create({
-      data: { name }
-    }) as unknown as Category;
+    return prisma.category.create({ data: { name } });
   },
 
   async update(id: number, name: string): Promise<Category> {
-    return await prisma.category.update({
-      where: { id },
-      data: { name }
-    }) as unknown as Category;
+    return prisma.category.update({ where: { id }, data: { name } });
   },
 
   async softDelete(id: number): Promise<Category> {
-    return await prisma.category.update({
-      where: { id },
-      data: { deletedAt: new Date() }
-    }) as unknown as Category;
-  }
+    return prisma.category.update({ where: { id }, data: { deletedAt: new Date() } });
+  },
 };

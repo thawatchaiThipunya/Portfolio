@@ -1,6 +1,5 @@
 import { contractBackendService } from "../services/contractService";
 import { NextResponse } from "next/server";
-import { Contract } from "@/app/cms/lib/types";
 
 export const contractController = {
   async getAll() {
@@ -26,7 +25,7 @@ export const contractController = {
 
   async create(req: Request) {
     try {
-      const body: Partial<Contract> = await req.json();
+      const body = await req.json();
       const data = await contractBackendService.create(body);
       return NextResponse.json(data);
     } catch (error: unknown) {
@@ -37,7 +36,7 @@ export const contractController = {
 
   async update(req: Request, id: number) {
     try {
-      const body: Partial<Contract> = await req.json();
+      const body = await req.json();
       const data = await contractBackendService.update(id, body);
       return NextResponse.json(data);
     } catch (error: unknown) {
@@ -54,5 +53,5 @@ export const contractController = {
       const message = error instanceof Error ? error.message : "Internal Server Error";
       return NextResponse.json({ error: message }, { status: 500 });
     }
-  }
+  },
 };

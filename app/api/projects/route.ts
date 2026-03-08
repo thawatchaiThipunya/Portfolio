@@ -1,5 +1,7 @@
 import { projectController } from "@/backend/controller/projectController";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   return projectController.getAll();
 }
