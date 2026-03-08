@@ -29,12 +29,13 @@ model Project {
   solutions      String?
   company        String
   employmentType String
-  status         ProjectStatus    @default(ACTIVATED)
+  status         ProjectStatus @default(ACTIVATED)
   deletedAt      DateTime?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  id             Int       @unique @default(autoincrement())
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  id             Int           @unique @default(autoincrement())
   image_url      String
+  sortOrder      Int           @default(0)
 }
 
 model Category {
@@ -51,6 +52,7 @@ model Technical {
   logo       String
   id         Int       @unique @default(autoincrement())
   categoryId Int
+  sortOrder  Int       @default(0)
   createdAt  DateTime  @default(now())
   deletedAt  DateTime?
   updatedAt  DateTime  @updatedAt

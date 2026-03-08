@@ -22,6 +22,10 @@ export const technicalService = {
     return res.data;
   },
 
+  async reorder(items: { id: number; sortOrder: number }[]): Promise<void> {
+    await axios.patch("/api/technical/reorder", { items });
+  },
+
   async delete(id: number) {
     const res = await axios.delete(`/api/technical/${id}`);
     return res.data;

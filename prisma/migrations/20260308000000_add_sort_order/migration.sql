@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Project" ADD COLUMN "sortOrder" INTEGER NOT NULL DEFAULT 0;
+
+-- AlterTable
+ALTER TABLE "Technical" ADD COLUMN "sortOrder" INTEGER NOT NULL DEFAULT 0;
